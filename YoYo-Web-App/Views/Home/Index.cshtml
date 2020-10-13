@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Yo Yo App";
+}
+@{
+    Layout = "_Layout";
+}
+@*style="width: 802px;margin-left: 171px;"*@
+<div class="border border-dark" style="width: 70%;margin-left: 17%;">
+    <div class="row justify-content-center">
+        <div>
+            <h6>Yo Yo Test</h6>
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div id="playButton">
+            <i class="fad fa-play-circle fa-10x" style="--fa-primary-color: darkgreen;--fa-secondary-color: lightgrey;" onclick="showLoader()"></i>
+        </div>
+        <div id="circle">
+            <strong></strong>
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-sm-2 border-right d-flex justify-content-center">
+            <div class="form-group">
+                <h6 for="shuttleValue" class="text-secondary">Next Shuttle</h6>
+                <small id="shuttleValue" class="text-success">testing form</small>
+            </div>
+
+        </div>
+        <div class="col-sm-2 border-right d-flex justify-content-center">
+            <div class="form-group">
+                <h6 for="totalTimeValue" class="text-secondary">Total Time</h6>
+                <small id="totalTimeValue" class="text-success">testing form</small>
+            </div>
+        </div>
+        <div class="col-sm-2 d-flex justify-content-center">
+            <div class="form-group">
+                <h6 for="totalDistanceValue" class="text-secondary">Total Distance</h6>
+                <small id="totalDistanceValue" class="text-success">testing form</small>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-sm-2 border-bottom">
+            <h6 style="color:darkgreen">Track</h6>
+        </div>
+        <div class="col-sm-2 border-bottom"></div>
+        <div class="col-sm-2 border-bottom"></div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Cras justo odio
+                    <button class="badge badge-secondary badge-pill">warned</button>
+                    <button class="badge badge-danger badge-pill">Stop</button>
+                </li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-sm-2 border-bottom">
+        </div>
+        <div class="col-sm-2 border-bottom"></div>
+        <div class="col-sm-2 border-bottom"></div>
+    </div>
+    <br />
+</div>
