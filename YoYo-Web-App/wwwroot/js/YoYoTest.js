@@ -1,4 +1,5 @@
-﻿var fitNessRatings = [];
+﻿var FITNESSRATINGS = [];
+var ATHLETES = [];
 $(document).ready(function () {
     $.ajax({
         type: "GET",
@@ -6,7 +7,29 @@ $(document).ready(function () {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            fitnessRatings = result;
+            FITNESSRATINGS = result;
+        },
+        error: function (error) {
+            alert("Internal Server Error");
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: getBaseUrl() + "BeepTest/GetAthletes",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            ATHLETES = result;
+
+            $.each(ATHLETES, function (i) {
+                var li = $('#AthletesList')
+                    .append(`<li class="list-group-item d-flex justify-content-between align-items-center">
+                    `+ ATHLETES[i].id + '. ' + ATHLETES[i].name + `
+                    <button class="badge badge-secondary badge-pill id='`+ATHLETES[i].id + 'warn' + `' onclick='warn(` + ATHLETES[i].id + `)'">warn</button>
+                    <button class="badge badge-danger badge-pill id='`+ATHLETES[i].id + 'stop' + `' onclick='stop(` + ATHLETES[i].id + `)'">Stop</button>
+                         </li>`);
+            });
         },
         error: function (error) {
             alert("Internal Server Error");
@@ -60,6 +83,14 @@ function showLoader() {
     canvas = $('#circle').circleProgress(circlesettings);
 }
 
+function stop(athlete) {
+    var id = athlete.id;
+}
+
+function warn(athlete) {
+
+}
+
 function getBaseUrl() {
-    return "/";
+    return "api/";
 }

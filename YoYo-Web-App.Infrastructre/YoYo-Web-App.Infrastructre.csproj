@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>YoYo_Web_App.Infrastructre</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YoYo-Web-App.Core\YoYo-Web-App.Core.csproj" />
+    <ProjectReference Include="..\YoYo-Web-App.Utility\YoYo-Web-App.Utility.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,22 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Text.Json;
-using YoYo_Web_App.Models;
-using System.Linq;
+using YoYo_Web_App.Core;
 
 namespace YoYo_Web_App.Controllers
 {
     public class BeepTestController : Controller
     {
-        private readonly IWebHostEnvironment hostingEnvironment;
-        private readonly IConfiguration configuration;
+        private readonly IAthleteService athleteService;
 
-        public BeepTestController(IWebHostEnvironment hostingEnvironment, IConfiguration configuration)
+        public BeepTestController(IAthleteService athleteService)
         {
-            this.hostingEnvironment = hostingEnvironment;
-            this.configuration = configuration;
+            this.athleteService = athleteService;
         }
 
         public IActionResult BeepTestView()
@@ -24,16 +18,19 @@ namespace YoYo_Web_App.Controllers
             return View();
         }
 
+        [Route("api/BeepTest/GetAthletes")]
+        [HttpGet]
+        public List<Athlete> GetAthletes()
+        {
+            var athletes = this.athleteService.GetAthletes();
+            return athletes;
+        }
+
+        [Route("api/BeepTest/GetFitnessRatings")]
         [HttpGet]
         public List<FitnessRating> GetFitnessRatings()
         {
-            var webRootPath = this.hostingEnvironment.WebRootPath;
-            var filePath = this.configuration.GetSection("BeepTestFilePath").Value;
-            var data = System.IO.File.ReadAllText(System.IO.Path.Combine(webRootPath, filePath));
-            var fitnessRatings = JsonSerializer.Deserialize<List<FitnessRating>>(data)
-                                    .OrderBy(x => x.SpeedLevel)
-                                    .ThenBy(x => x.ShuttleNo)
-                                    .ToList();
+            var fitnessRatings = this.athleteService.GetFitnessRatings();
             return fitnessRatings;
         }
     }

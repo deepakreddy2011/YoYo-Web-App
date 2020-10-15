@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace YoYo_Web_App.Models
+﻿namespace YoYo_Web_App.Core
 {
     public class FitnessRating
     {
