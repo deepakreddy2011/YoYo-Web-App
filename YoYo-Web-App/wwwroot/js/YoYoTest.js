@@ -25,10 +25,12 @@ $(document).ready(function () {
             $.each(ATHLETES, function (i) {
                 var li = $('#AthletesList')
                     .append(`<li class="list-group-item d-flex justify-content-between align-items-center">
-                    `+ ATHLETES[i].id + '. ' + ATHLETES[i].name + `
-                    <button class="badge badge-secondary badge-pill id='`+ATHLETES[i].id + 'warn' + `' onclick='warn(` + ATHLETES[i].id + `)'">warn</button>
-                    <button class="badge badge-danger badge-pill id='`+ATHLETES[i].id + 'stop' + `' onclick='stop(` + ATHLETES[i].id + `)'">Stop</button>
-                         </li>`);
+                                                `+ ATHLETES[i].id + '. ' + ATHLETES[i].name + `
+                                <div>
+                                    <span title="warn" style="cursor: pointer;" class="badge badge-secondary badge-pill" style='margin-left: 30%;' id='`+ ATHLETES[i].id + 'warn' + `' onclick='warn(` + ATHLETES[i].id + `)'">warn</span>
+                                    <span title="stop" style="cursor: pointer;" class="badge badge-danger badge-pill id='`+ ATHLETES[i].id + 'stop' + `' onclick='stop(` + ATHLETES[i].id + `)'">Stop</span>
+                                </div
+                             </li>`);
             });
         },
         error: function (error) {
@@ -48,39 +50,45 @@ function showLoader() {
             gradient: ['#ffcccb', '#ff5f43']
         }
     };
-    var intervalId = setInterval(function () {
-        circlesettings.value = (new Date - start) / 1000;
-        var value = circlesettings.value / 10;
-        if (value <= 1) {
-            canvas = $('#circle').circleProgress({ value: value });
-            var obj = $('#circle').data('circle-progress'),
-                ctx = obj.ctx,
-                s = obj.size;
-            ctx.font = "bold " + s / 15 + "px sans-serif";
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#000000';
-            ctx.fillText("14Km/h", s / 2, s / 2 + 30);
 
-            ctx.font = "bold " + s / 10 + "px sans-serif";
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#808080';
-            ctx.fillText("Shuttle 5", s / 2, s / 2);
-
-            ctx.font = "bold " + s / 10 + "px sans-serif";
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#808080';
-            ctx.fillText("Level 12", s / 2, s / 2 - 30);
-            ctx.restore();
-        } else {
-            clearInterval(intervalId);
-        }
-
-    }, 1000);
+    var cumilativeTimes = $.map(FITNESSRATINGS, function (fitnessRating) { return parseInt(fitnessRating.commulativeTime.toString().split(':')[1]); });
+    var totalTime = Math.max(cumilativeTimes);
+    for (i = 0; i <= FITNESSRATINGS.length; i++) {
+        setTimeout(function (fitnessRating) {
+            drawCircleProgress(totalTime, fitnessRating);
+            $("#shuttleValue").text(FITNESSRATINGS[i + 1].levelTime + " S");
+            $("#totalTimeValue").text(FITNESSRATINGS[i].commulativeTime + " S");
+            $("#totalDistanceValue").text(FITNESSRATINGS[i].accumulatedShuttleDistance + " S");
+        }, FITNESSRATINGS[i] * 1000, FITNESSRATINGS[i]);
+    }
 
     canvas = $('#circle').circleProgress(circlesettings);
+}
+
+function drawCircleProgress(totalTime, fitnessRating) {
+    var value = (fitnessRating.commulativeTime / totalTime) * 100;
+    canvas = $('#circle').circleProgress({ value: value });
+    var obj = $('#circle').data('circle-progress');
+    var ctx = obj.ctx;
+    var s = obj.size;
+    ctx.font = "bold " + s / 15 + "px sans-serif";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#000000';
+    ctx.fillText(fitnessRating.speed + "Km/h", s / 2, s / 2 + 30);
+
+    ctx.font = "bold " + s / 10 + "px sans-serif";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#808080';
+    ctx.fillText("Shuttle " + fitnessRating.shuttleNo, s / 2, s / 2);
+
+    ctx.font = "bold " + s / 10 + "px sans-serif";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#808080';
+    ctx.fillText("Level " + fitnessRating.speedLevel, s / 2, s / 2 - 30);
+    ctx.restore();
 }
 
 function stop(athlete) {
