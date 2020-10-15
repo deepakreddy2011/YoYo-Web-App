@@ -50,7 +50,7 @@ namespace YoYo_Web_App
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=BeepTest}/{action=BeepTestView}/{id?}");
             });
         }
     }
