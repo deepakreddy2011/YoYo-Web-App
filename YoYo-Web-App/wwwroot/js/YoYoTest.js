@@ -51,14 +51,14 @@ function showLoader() {
         }
     };
 
-    var cumilativeTimes = $.map(FITNESSRATINGS, function (fitnessRating) { return parseInt(fitnessRating.commulativeTime.toString().split(':')[1]); });
+    var cumilativeTimes = $.map(FITNESSRATINGS, function (fitnessRating) { return (parseInt(fitnessRating.commulativeTime.toString().split(':')[0]) * 60 + parseInt(fitnessRating.commulativeTime.toString().split(':')[1])); });
     var totalTime = Math.max(cumilativeTimes);
     for (i = 0; i <= FITNESSRATINGS.length; i++) {
         setTimeout(function (fitnessRating) {
             drawCircleProgress(totalTime, fitnessRating);
             $("#shuttleValue").text(FITNESSRATINGS[i + 1].levelTime + " S");
-            $("#totalTimeValue").text(FITNESSRATINGS[i].commulativeTime + " S");
-            $("#totalDistanceValue").text(FITNESSRATINGS[i].accumulatedShuttleDistance + " S");
+            $("#totalTimeValue").text(FITNESSRATINGS[i].commulativeTime + " M");
+            $("#totalDistanceValue").text(FITNESSRATINGS[i].accumulatedShuttleDistance + " M");
         }, FITNESSRATINGS[i] * 1000, FITNESSRATINGS[i]);
     }
 
@@ -66,7 +66,8 @@ function showLoader() {
 }
 
 function drawCircleProgress(totalTime, fitnessRating) {
-    var value = (fitnessRating.commulativeTime / totalTime) * 100;
+    var commulativeTime = parseInt(fitnessRating.commulativeTime.toString().split(':')[0]) * 60 + parseInt(fitnessRating.commulativeTime.toString().split(':')[1]);
+    var value = (commulativeTime / totalTime) * 100;
     canvas = $('#circle').circleProgress({ value: value });
     var obj = $('#circle').data('circle-progress');
     var ctx = obj.ctx;
