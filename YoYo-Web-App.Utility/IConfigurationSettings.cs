@@ -4,5 +4,6 @@
     {
         public string BeepTestFilePath { get; }
         public string AthletesFilePath { get; }
+        public string AthleteStatePath { get; }
     }
 }

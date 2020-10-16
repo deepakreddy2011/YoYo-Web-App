@@ -33,5 +33,21 @@ namespace YoYo_Web_App.Controllers
             var fitnessRatings = this.athleteService.GetFitnessRatings();
             return fitnessRatings;
         }
+
+        [Route("api/BeepTest/GetAthleteStates")]
+        [HttpGet]
+        public List<AthleteState> GetAthleteStates() 
+        {
+            var states = this.athleteService.GetAthleteStates();
+            return states;
+        }
+
+        [Route("api/BeepTest/UpdateState")]
+        [HttpPost]
+        public void UpdateState(List<AthleteState> athleteStates)
+        {
+            this.athleteService.UpdateState(athleteStates);
+        }
+
     }
 }

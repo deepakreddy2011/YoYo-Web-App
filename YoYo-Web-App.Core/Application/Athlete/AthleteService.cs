@@ -38,5 +38,15 @@ namespace YoYo_Web_App.Core
                                     .ToList();
             return fitnessRatings;
         }
+
+        public void UpdateState(List<AthleteState> athleteStates)
+        {
+            this.athleteRepository.UpdateState(athleteStates);
+        }
+
+        public List<AthleteState> GetAthleteStates()
+        {
+           return this.athleteRepository.GetAthleteStates();
+        }
     }
 }

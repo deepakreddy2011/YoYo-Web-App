@@ -8,5 +8,7 @@ namespace YoYo_Web_App.Core
     {
         List<Athlete> GetAthletes();
         List<FitnessRating> GetFitnessRatings();
+        void UpdateState(List<AthleteState> athleteStates);
+        List<AthleteState> GetAthleteStates();
     }
 }
