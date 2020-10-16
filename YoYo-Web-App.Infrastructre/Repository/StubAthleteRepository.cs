@@ -28,8 +28,6 @@ namespace YoYo_Web_App.Infrastructre
         {
             var data = System.IO.File.ReadAllText(this.configurationSettings.BeepTestFilePath);
             var fitnessRatings = JsonSerializer.Deserialize<List<FitnessRating>>(data)
-                                   .OrderBy(x => x.SpeedLevel)
-                                    .ThenBy(x => x.ShuttleNo)
                                    .ToList();
             return fitnessRatings;
         }

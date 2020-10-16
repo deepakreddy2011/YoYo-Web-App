@@ -1,6 +1,10 @@
 ﻿var FITNESSRATINGS = [];
 var ATHLETES = [];
+var TOTALTIME = 0;
 $(document).ready(function () {
+    $("#shuttleValue").text("0 S");
+    $("#totalTimeValue").text("0 M");
+    $("#totalDistanceValue").text("0 M");
     $.ajax({
         type: "GET",
         url: getBaseUrl() + "BeepTest/GetFitnessRatings",
@@ -8,6 +12,10 @@ $(document).ready(function () {
         dataType: "json",
         success: function (result) {
             FITNESSRATINGS = result;
+            var cumilativeTimes = $.map(FITNESSRATINGS, function (fitnessRating) {
+                return parseInt(fitnessRating.commulativeTime);
+            });
+            TOTALTIME = Math.max.apply(Math, cumilativeTimes);
         },
         error: function (error) {
             alert("Internal Server Error");
@@ -51,23 +59,31 @@ function showLoader() {
         }
     };
 
-    var cumilativeTimes = $.map(FITNESSRATINGS, function (fitnessRating) { return (parseInt(fitnessRating.commulativeTime.toString().split(':')[0]) * 60 + parseInt(fitnessRating.commulativeTime.toString().split(':')[1])); });
-    var totalTime = Math.max(cumilativeTimes);
-    for (i = 0; i <= FITNESSRATINGS.length; i++) {
-        setTimeout(function (fitnessRating) {
-            drawCircleProgress(totalTime, fitnessRating);
-            $("#shuttleValue").text(FITNESSRATINGS[i + 1].levelTime + " S");
-            $("#totalTimeValue").text(FITNESSRATINGS[i].commulativeTime + " M");
-            $("#totalDistanceValue").text(FITNESSRATINGS[i].accumulatedShuttleDistance + " M");
-        }, FITNESSRATINGS[i] * 1000, FITNESSRATINGS[i]);
-    }
 
+    setTimeout(repeatingFunc, 0, 0, 0);
     canvas = $('#circle').circleProgress(circlesettings);
 }
+function repeatingFunc(startTime, i) {
+    var timeoutId = setTimeout(function (index) {
+        if (i < FITNESSRATINGS.length) {
+            drawCircleProgress(FITNESSRATINGS[i]);
+            $("#shuttleValue").text(FITNESSRATINGS[i + 1].levelTime + " S");
+            var minutes = Math.floor(FITNESSRATINGS[i].commulativeTime / 60);
+            var seconds = FITNESSRATINGS[i].commulativeTime - minutes * 60;
+            $("#totalTimeValue").text(minutes.toString() + " : " + seconds.toString() + " M");
+            $("#totalDistanceValue").text(FITNESSRATINGS[i].accumulatedShuttleDistance + " M");
+            startTime = parseInt(FITNESSRATINGS[i + 1].levelTime) * 1000;
+            i = i + 1;
+            repeatingFunc(startTime, i);
+        }
+        else {
+            clearTimeout(timeoutId);
+        }
+    }, startTime);
+}
 
-function drawCircleProgress(totalTime, fitnessRating) {
-    var commulativeTime = parseInt(fitnessRating.commulativeTime.toString().split(':')[0]) * 60 + parseInt(fitnessRating.commulativeTime.toString().split(':')[1]);
-    var value = (commulativeTime / totalTime) * 100;
+function drawCircleProgress(fitnessRating) {
+    var value = (parseInt(fitnessRating.commulativeTime) / TOTALTIME);
     canvas = $('#circle').circleProgress({ value: value });
     var obj = $('#circle').data('circle-progress');
     var ctx = obj.ctx;
