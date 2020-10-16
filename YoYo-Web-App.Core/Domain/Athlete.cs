@@ -8,5 +8,6 @@ namespace YoYo_Web_App.Core
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public AthleteState AthleteState { get; set; }
     }
 }
