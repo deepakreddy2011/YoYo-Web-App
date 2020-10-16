@@ -5,6 +5,7 @@ var PREVIOUSSUCCESSFULLEVEL = 0;
 var PREVIOUSSUCCESSFULSHUTTLE = 0;
 var STOPPEDATHLETEIDS = [];
 var TIMEOUTID = "";
+var athletesState = [];
 $(document).ready(function () {
     $("#shuttleValue").text("0 S");
     $("#totalTimeValue").text("0 M");
@@ -139,6 +140,25 @@ function stop(athleteid) {
     if (STOPPEDATHLETEIDS.length === ATHLETES.length) {
         completeTest();
     }
+    var state = $.grep(athletesState, function (element) { return element.id === athleteid; });
+    if (state !== null)
+    {
+        state.isStopped = true;
+        state.result = PREVIOUSSUCCESSFULLEVEL + "-" + PREVIOUSSUCCESSFULSHUTTLE;
+        athletesState.push(state);
+    }
+}
+
+function warn(athleteid) {
+    $("#" + athleteid + "warn").css({ "cursor": '' });
+    $("#" + athleteid + "warn").removeClass("badge-dark");
+    $("#" + athleteid + "warn").addClass("badge-secondary");
+    $("#" + athleteid + "warn").text("warned");
+    var state = $.grep(athletesState, function (element) { return element.id === athleteid; });
+    if (state !== null) {
+        state.isWarned = true;
+        athletesState.push(state);
+    }
 }
 
 function completeTest() {
@@ -152,14 +172,7 @@ function completeTest() {
     ctx.fillStyle = '#ffcccb';
     ctx.fillText("Test Complete", s / 2, s / 2);
     clearTimeout(TIMEOUTID);
-}
 
-
-function warn(athleteid) {
-    $("#" + athleteid + "warn").css({ "cursor": '' });
-    $("#" + athleteid + "warn").removeClass("badge-dark");
-    $("#" + athleteid + "warn").addClass("badge-secondary");
-    $("#" + athleteid + "warn").text("warned");
 }
 
 function getBaseUrl() {
