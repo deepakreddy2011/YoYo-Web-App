@@ -146,6 +146,7 @@ function stop(athleteid) {
         state.isStopped = true;
         state.result = PREVIOUSSUCCESSFULLEVEL + "-" + PREVIOUSSUCCESSFULSHUTTLE;
         athletesState.push(state);
+         // TODO: post to backend
     }
 }
 
@@ -158,6 +159,7 @@ function warn(athleteid) {
     if (state !== null) {
         state.isWarned = true;
         athletesState.push(state);
+        // TODO: post to backend
     }
 }
 

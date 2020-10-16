@@ -22,12 +22,6 @@ namespace YoYo_Web_App.Infrastructre
             var athletes = JsonSerializer.Deserialize<List<Athlete>>(data)
                                    .OrderBy(x => x.Name)
                                    .ToList();
-            var states = this.GetAthleteStates();
-            states.ForEach(x =>
-            {
-                var athlete = athletes.Where(y => y.Id == x.Id).FirstOrDefault();
-                athlete.AthleteState = new AthleteState { Id = x.Id, IsStopped = x.IsStopped, IsWarned = x.IsWarned, result = x.result };
-            });
             return athletes;
         }
 
