@@ -1,6 +1,8 @@
 ﻿var FITNESSRATINGS = [];
 var ATHLETES = [];
 var TOTALTIME = 0;
+var PREVIOUSSUCCESSFULLEVEL = 0;
+var PREVIOUSSUCCESSFULSHUTTLE = 0;
 $(document).ready(function () {
     $("#shuttleValue").text("0 S");
     $("#totalTimeValue").text("0 M");
@@ -36,10 +38,11 @@ $(document).ready(function () {
                                                 `+ ATHLETES[i].id + '. ' + ATHLETES[i].name + `
                                 <div>
                                     <span title="warn" style="cursor: pointer;" class="badge badge-secondary badge-pill" style='margin-left: 30%;' id='`+ ATHLETES[i].id + 'warn' + `' onclick='warn(` + ATHLETES[i].id + `)'">warn</span>
-                                    <span title="stop" style="cursor: pointer;" class="badge badge-danger badge-pill id='`+ ATHLETES[i].id + 'stop' + `' onclick='stop(` + ATHLETES[i].id + `)'">Stop</span>
+                                    <span title="stop" style="cursor: pointer;" class="badge badge-danger badge-pill" id='`+ ATHLETES[i].id + 'stop' + `' onclick='stop(` + ATHLETES[i].id + `)'">Stop</span>
                                 </div
                              </li>`);
             });
+            toggleBadges(); 
         },
         error: function (error) {
             alert("Internal Server Error");
@@ -59,9 +62,16 @@ function showLoader() {
         }
     };
 
-
+    toggleBadges();
     setTimeout(repeatingFunc, 0, 0, 0);
     canvas = $('#circle').circleProgress(circlesettings);
+}
+function toggleBadges() {
+    var athleteIds = $.map(ATHLETES, function (element) { return element.id; });
+    $.each(athleteIds, function (i) {
+        $("#" + athleteIds[i] + "warn").toggle();
+        $("#" + athleteIds[i] + "stop").toggle();
+    });
 }
 function repeatingFunc(startTime, i) {
     var timeoutId = setTimeout(function (index) {
@@ -72,6 +82,8 @@ function repeatingFunc(startTime, i) {
             var seconds = FITNESSRATINGS[i].commulativeTime - minutes * 60;
             $("#totalTimeValue").text(minutes.toString() + " : " + seconds.toString() + " M");
             $("#totalDistanceValue").text(FITNESSRATINGS[i].accumulatedShuttleDistance + " M");
+            PREVIOUSSUCCESSFULLEVEL = FITNESSRATINGS[i].speedLevel;
+            PREVIOUSSUCCESSFULSHUTTLE = FITNESSRATINGS[i].shuttleNo;
             startTime = parseInt(FITNESSRATINGS[i + 1].levelTime) * 1000;
             i = i + 1;
             repeatingFunc(startTime, i);
