@@ -3,6 +3,8 @@ var ATHLETES = [];
 var TOTALTIME = 0;
 var PREVIOUSSUCCESSFULLEVEL = 0;
 var PREVIOUSSUCCESSFULSHUTTLE = 0;
+var STOPPEDATHLETEIDS = [];
+var TIMEOUTID = "";
 $(document).ready(function () {
     $("#shuttleValue").text("0 S");
     $("#totalTimeValue").text("0 M");
@@ -37,12 +39,14 @@ $(document).ready(function () {
                     .append(`<li class="list-group-item d-flex justify-content-between align-items-center">
                                                 `+ ATHLETES[i].id + '. ' + ATHLETES[i].name + `
                                 <div>
-                                    <span title="warn" style="cursor: pointer;" class="badge badge-secondary badge-pill" style='margin-left: 30%;' id='`+ ATHLETES[i].id + 'warn' + `' onclick='warn(` + ATHLETES[i].id + `)'">warn</span>
+                                    <span title="warn" style="cursor: pointer;" class="badge badge-dark badge-pill" style='margin-left: 30%;' id='`+ ATHLETES[i].id + 'warn' + `' onclick='warn(` + ATHLETES[i].id + `)'">warn</span>
                                     <span title="stop" style="cursor: pointer;" class="badge badge-danger badge-pill" id='`+ ATHLETES[i].id + 'stop' + `' onclick='stop(` + ATHLETES[i].id + `)'">Stop</span>
+                                    <span id='`+ ATHLETES[i].id + 'result' + `' class="badge badge-light">Light</span>
                                 </div
                              </li>`);
             });
-            toggleBadges(); 
+            toggleBadges();
+            removeBadges();
         },
         error: function (error) {
             alert("Internal Server Error");
@@ -64,7 +68,7 @@ function showLoader() {
 
     toggleBadges();
     setTimeout(repeatingFunc, 0, 0, 0);
-    canvas = $('#circle').circleProgress(circlesettings);
+    $('#circle').circleProgress(circlesettings);
 }
 function toggleBadges() {
     var athleteIds = $.map(ATHLETES, function (element) { return element.id; });
@@ -73,8 +77,14 @@ function toggleBadges() {
         $("#" + athleteIds[i] + "stop").toggle();
     });
 }
+function removeBadges() {
+    var athleteIds = $.map(ATHLETES, function (element) { return element.id; });
+    $.each(athleteIds, function (i) {
+        $("#" + athleteIds[i] + "result").toggle();
+    });
+}
 function repeatingFunc(startTime, i) {
-    var timeoutId = setTimeout(function (index) {
+    TIMEOUTID = setTimeout(function (index) {
         if (i < FITNESSRATINGS.length) {
             drawCircleProgress(FITNESSRATINGS[i]);
             $("#shuttleValue").text(FITNESSRATINGS[i + 1].levelTime + " S");
@@ -89,14 +99,14 @@ function repeatingFunc(startTime, i) {
             repeatingFunc(startTime, i);
         }
         else {
-            clearTimeout(timeoutId);
+            completeTest();
         }
     }, startTime);
 }
 
 function drawCircleProgress(fitnessRating) {
     var value = (parseInt(fitnessRating.commulativeTime) / TOTALTIME);
-    canvas = $('#circle').circleProgress({ value: value });
+    $('#circle').circleProgress({ value: value });
     var obj = $('#circle').data('circle-progress');
     var ctx = obj.ctx;
     var s = obj.size;
@@ -120,12 +130,36 @@ function drawCircleProgress(fitnessRating) {
     ctx.restore();
 }
 
-function stop(athlete) {
-    var id = athlete.id;
+function stop(athleteid) {
+    $("#" + athleteid + "stop").toggle();
+    $("#" + athleteid + "result").toggle();
+    $("#" + athleteid + "warn").toggle();
+    $("#" + athleteid + "result").text(PREVIOUSSUCCESSFULLEVEL + "-" + PREVIOUSSUCCESSFULSHUTTLE);
+    STOPPEDATHLETEIDS.push(athleteid);
+    if (STOPPEDATHLETEIDS.length === ATHLETES.length) {
+        completeTest();
+    }
 }
 
-function warn(athlete) {
+function completeTest() {
+    $('#circle').circleProgress({ value: 1 });
+    var obj = $('#circle').data('circle-progress');
+    var ctx = obj.ctx;
+    var s = obj.size;
+    ctx.font = "bold " + s / 10 + "px sans-serif";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ffcccb';
+    ctx.fillText("Test Complete", s / 2, s / 2);
+    clearTimeout(TIMEOUTID);
+}
 
+
+function warn(athleteid) {
+    $("#" + athleteid + "warn").css({ "cursor": '' });
+    $("#" + athleteid + "warn").removeClass("badge-dark");
+    $("#" + athleteid + "warn").addClass("badge-secondary");
+    $("#" + athleteid + "warn").text("warned");
 }
 
 function getBaseUrl() {
