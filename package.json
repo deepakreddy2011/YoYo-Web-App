@@ -1,0 +1,29 @@
+{
+  "name": "@optum/orion-icons",
+  "version": "0.0.0",
+  "description": "Orion Design System utility icons as SVGs, React components, and Angular components.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-components-for-svgs": "node ./generate_component"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Optum/orion-icons.git"
+  },
+  "keywords": [
+    "orion",
+    "icons",
+    "design"
+  ],
+  "author": {
+    "name": "Orion Team",
+    "email": "unicron-engineers@rallyhealth.com",
+    "url": "https://github.com/orgs/Optum/teams/orion"
+  },
+  "license": "APACHE 2",
+  "bugs": {
+    "url": "https://github.com/Optum/orion-icons/issues"
+  },
+  "homepage": "https://github.com/Optum/orion-icons#readme"
+}

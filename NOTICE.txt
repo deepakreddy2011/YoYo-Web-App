@@ -1,0 +1,10 @@
+@optum/otion-icons
+
+Copyright 2021 Optum
+
+Project Description:
+====================
+Orion Design System utility icons as SVGs, React components, and Angular components.
+
+Author(s):
+@lundebrek
